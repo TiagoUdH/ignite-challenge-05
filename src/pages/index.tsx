@@ -1,6 +1,6 @@
-// import { GetStaticProps } from 'next';
+import { GetStaticProps } from 'next';
 
-// import { getPrismicClient } from '../services/prismic';
+import { getPrismicClient } from '../services/prismic';
 
 // import commonStyles from '../styles/common.module.scss';
 // import styles from './home.module.scss';
@@ -24,13 +24,24 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-export default function Home() {
-  return <h1>dkljfkl</h1>
+export default function Home({ postsPagination }: HomeProps) {
+  return <h1>Hello World!</h1>
 }
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient({});
-//   // const postsResponse = await prismic.getByType(TODO);
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient({});
+  const postsResponse = await prismic.getByType('posts', {
+    pageSize: 1
+  });
 
-//   // TODO
-// };
+  const postsPagination = {
+    next_page: postsResponse.next_page,
+    results: postsResponse.results,
+  }
+
+  return {
+    props: {
+      postsPagination
+    }
+  }
+};
