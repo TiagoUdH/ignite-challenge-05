@@ -77,10 +77,10 @@ export default function Post({ post }: PostProps) {
               </ul>
             </header>
 
-            {post.data.content.map(post => (
-              <section>
-                <h2>{post.heading}</h2>
-                <div dangerouslySetInnerHTML={{ __html: RichText.asHtml(post.body) }} />
+            {post.data.content.map(part => (
+              <section key={part.heading}>
+                <h2>{part.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: RichText.asHtml(part.body) }} />
               </section>
             ))}
           </div>
@@ -92,7 +92,9 @@ export default function Post({ post }: PostProps) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient({});
-  const posts = await prismic.getByType('posts');
+  const posts = await prismic.getByType("posts", {
+    pageSize: 2
+  });
 
   const paths = posts.results.map(post => {
     return {
@@ -103,13 +105,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   });
 
   return {
-    paths: [
-      {
-        params: {
-          slug: 'a-funcionalidade-de-hooks-trazida-a-partir-da-vers'
-        }
-      }
-    ],
+    paths,
     fallback: true
   }
 };
