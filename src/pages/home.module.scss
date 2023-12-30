@@ -7,6 +7,8 @@
     letter-spacing: -0.5px;
 
     transition: color 0.2s;
+
+    color: var(--heading);
   }
 
   &:hover strong {
@@ -27,6 +29,8 @@
     gap: 1.5rem;
 
     list-style: none;
+
+    color: var(--info);
 
     li {
       font-size: 0.875rem;

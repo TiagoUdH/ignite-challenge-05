@@ -8,7 +8,7 @@ import { getPrismicClient } from '../../services/prismic';
 
 import { useRouter } from 'next/router';
 import commonStyles from '../../styles/common.module.scss';
-// import styles from './post.module.scss';
+import styles from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
@@ -35,7 +35,7 @@ export default function Post({ post }: PostProps) {
   const { isFallback } = useRouter();
 
   if (isFallback) {
-    return <span>Carregando...</span>
+    return <span className={styles.loading}>Carregando...</span>
   }
 
   const wordCount = post.data.content.reduce((numberOfWords, contentItem) => {
@@ -52,10 +52,10 @@ export default function Post({ post }: PostProps) {
   return (
     <main>
       <article>
-        <img src={post.data.banner.url} alt="Banner do post" />
+        <img src={post.data.banner.url} alt="Banner do post" className={styles.banner} />
 
         <div className={commonStyles.container}>
-          <div className={commonStyles.content}>
+          <div className={`${commonStyles.content} ${styles.content}`}>
             <header>
               <h1>{post.data.title}</h1>
 
