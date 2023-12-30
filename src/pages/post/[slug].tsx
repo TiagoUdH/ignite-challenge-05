@@ -2,6 +2,7 @@
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { RichText } from 'prismic-dom';
 import { getPrismicClient } from '../../services/prismic';
 
 // import commonStyles from '../../styles/common.module.scss';
@@ -29,7 +30,18 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
-  return <h1>Post</h1>
+  const wordCount = post.data.content.reduce((numberOfWords, contentItem) => {
+    const numberOfWordsInHeading = contentItem.heading.split(/\s+/).length
+    const numberOfWordsInBody = RichText.asText(contentItem.body).split(/\s+/).length
+
+    numberOfWords += (numberOfWordsInHeading + numberOfWordsInBody)
+
+    return numberOfWords
+  }, 0)
+
+  const readingMinutes = Math.ceil(wordCount / 200)
+
+  return <h1>{readingMinutes}</h1>
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
