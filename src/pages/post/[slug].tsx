@@ -3,9 +3,10 @@ import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { RichText } from 'prismic-dom';
+import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { getPrismicClient } from '../../services/prismic';
 
-// import commonStyles from '../../styles/common.module.scss';
+import commonStyles from '../../styles/common.module.scss';
 // import styles from './post.module.scss';
 
 interface Post {
@@ -41,10 +42,50 @@ export default function Post({ post }: PostProps) {
 
   const readingMinutes = Math.ceil(wordCount / 200)
 
-  return <h1>{readingMinutes}</h1>
+  return (
+    <main>
+      <article>
+        <img src={post.data.banner.url} alt="Banner do post" />
+
+        <div className={commonStyles.container}>
+          <div className={commonStyles.content}>
+            <header>
+              <h1>{post.data.title}</h1>
+
+              <ul>
+                <li>
+                  <FiCalendar />
+                  {post.first_publication_date}
+                </li>
+
+                <li>
+                  <FiUser />
+                  {post.data.author}
+                </li>
+
+                <li>
+                  <FiClock />
+                  {readingMinutes} min
+                </li>
+              </ul>
+            </header>
+
+            {post.data.content.map(post => (
+              <section>
+                <h2>{post.heading}</h2>
+                <div dangerouslySetInnerHTML={{ __html: RichText.asHtml(post.body) }} />
+              </section>
+            ))}
+          </div>
+        </div>
+      </article>
+    </main>
+  )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  //  const prismic = getPrismicClient({});
+  //  const posts = await prismic.getByType(TODO);
   return {
     paths: [],
     fallback: true
