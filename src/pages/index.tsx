@@ -10,6 +10,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import commonStyles from '../styles/common.module.scss';
 // import styles from './home.module.scss';
 
+import { useState } from 'react';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 
 interface Post {
@@ -32,6 +33,41 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps) {
+  const [posts, setPosts] = useState(postsPagination.results)
+  const [nextPage, setNextPage] = useState(postsPagination.next_page)
+
+  async function handleNextPage() {
+    if (!nextPage) return;
+
+    console.log(nextPage)
+
+    const newPostFetch = await fetch(nextPage).then(res =>
+      res.json()
+    );
+
+    setNextPage(newPostFetch.next_page)
+
+    const newPost = newPostFetch.results.map(post => {
+      return {
+        uid: post.uid,
+        first_publication_date: format(
+          new Date(post.first_publication_date),
+          "dd MMM yyyy",
+          {
+            locale: ptBR,
+          }
+        ),
+        data: {
+          title: post.data.title,
+          subtitle: post.data.subtitle,
+          author: post.data.author,
+        }
+      }
+    })
+
+    setPosts([...posts, ...newPost])
+  }
+
   return (
     <>
       <Head>
@@ -40,7 +76,7 @@ export default function Home({ postsPagination }: HomeProps) {
 
       <main className={commonStyles.container}>
         <div className={commonStyles.content}>
-          {postsPagination.results.map(post => (
+          {posts.map(post => (
             <Link href={`/post/${post.uid}`} key={post.uid}>
               <strong>{post.data.title}</strong>
               <p>{post.data.subtitle}</p>
@@ -57,9 +93,11 @@ export default function Home({ postsPagination }: HomeProps) {
             </Link>
           ))}
 
-          <button type="button">
-            Carregar mais posts
-          </button>
+          {nextPage &&
+            <button type="button" onClick={handleNextPage}>
+              Carregar mais posts
+            </button>
+          }
         </div>
       </main>
     </>
