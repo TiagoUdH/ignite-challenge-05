@@ -6,6 +6,7 @@ import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { getPrismicClient } from '../../services/prismic';
 
+import { useRouter } from 'next/router';
 import commonStyles from '../../styles/common.module.scss';
 // import styles from './post.module.scss';
 
@@ -31,6 +32,12 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
+  const { isFallback } = useRouter();
+
+  if (isFallback) {
+    return <span>Carregando...</span>
+  }
+
   const wordCount = post.data.content.reduce((numberOfWords, contentItem) => {
     const numberOfWordsInHeading = contentItem.heading.split(/\s+/).length
     const numberOfWordsInBody = RichText.asText(contentItem.body).split(/\s+/).length
@@ -84,10 +91,25 @@ export default function Post({ post }: PostProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  //  const prismic = getPrismicClient({});
-  //  const posts = await prismic.getByType(TODO);
+  const prismic = getPrismicClient({});
+  const posts = await prismic.getByType('posts');
+
+  const paths = posts.results.map(post => {
+    return {
+      params: {
+        slug: post.uid
+      }
+    }
+  });
+
   return {
-    paths: [],
+    paths: [
+      {
+        params: {
+          slug: 'a-funcionalidade-de-hooks-trazida-a-partir-da-vers'
+        }
+      }
+    ],
     fallback: true
   }
 };
