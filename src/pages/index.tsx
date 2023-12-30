@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
 import commonStyles from '../styles/common.module.scss';
-// import styles from './home.module.scss';
+import styles from './home.module.scss';
 
 import { useState } from 'react';
 import { FiCalendar, FiUser } from 'react-icons/fi';
@@ -77,7 +77,7 @@ export default function Home({ postsPagination }: HomeProps) {
       <main className={commonStyles.container}>
         <div className={commonStyles.content}>
           {posts.map(post => (
-            <Link href={`/post/${post.uid}`} key={post.uid}>
+            <Link href={`/post/${post.uid}`} key={post.uid} className={styles.post}>
               <strong>{post.data.title}</strong>
               <p>{post.data.subtitle}</p>
               <ul>

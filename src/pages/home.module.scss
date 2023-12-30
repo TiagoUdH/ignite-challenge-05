@@ -1,1 +1,58 @@
-// TODO
+.post {
+  display: block;
+
+  strong {
+    font-weight: bold;
+    font-size: 1.75rem;
+    letter-spacing: -0.5px;
+  }
+
+  &:hover strong {
+    color: var(--highlight);
+  }
+
+  p {
+    margin: 0.5rem 0 1.5rem;
+    font-size: 1.125rem;
+  }
+
+  &+.post {
+    margin-top: 3rem;
+  }
+
+  ul {
+    display: flex;
+    gap: 1.5rem;
+
+    list-style: none;
+
+    li {
+      font-size: 0.875rem;
+
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+    }
+  }
+
+  &+button {
+    outline: 0;
+    border: 0;
+    background: transparent;
+
+    margin-top: 4rem;
+
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: var(--highlight);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
