@@ -50,43 +50,49 @@ export default function Post({ post }: PostProps) {
   const readingMinutes = Math.ceil(wordCount / 200)
 
   return (
-    <main>
-      <article>
-        <img src={post.data.banner.url} alt="Banner do post" className={styles.banner} />
+    <>
+      <Head>
+        <title>{post.data.title} | Space Traveling</title>
+      </Head>
 
-        <div className={commonStyles.container}>
-          <div className={`${commonStyles.content} ${styles.content}`}>
-            <header>
-              <h1>{post.data.title}</h1>
-
-              <ul>
-                <li>
-                  <FiCalendar />
-                  {post.first_publication_date}
-                </li>
-
-                <li>
-                  <FiUser />
-                  {post.data.author}
-                </li>
-
-                <li>
-                  <FiClock />
-                  {readingMinutes} min
-                </li>
-              </ul>
-            </header>
-
-            {post.data.content.map(part => (
-              <section key={part.heading}>
-                <h2>{part.heading}</h2>
-                <div dangerouslySetInnerHTML={{ __html: RichText.asHtml(part.body) }} />
-              </section>
-            ))}
+      <main>
+        <article>
+          <img src={post.data.banner.url} alt="Banner do post" className={styles.banner} />
+  
+          <div className={commonStyles.container}>
+            <div className={`${commonStyles.content} ${styles.content}`}>
+              <header>
+                <h1>{post.data.title}</h1>
+  
+                <ul>
+                  <li>
+                    <FiCalendar />
+                    {post.first_publication_date}
+                  </li>
+  
+                  <li>
+                    <FiUser />
+                    {post.data.author}
+                  </li>
+  
+                  <li>
+                    <FiClock />
+                    {readingMinutes} min
+                  </li>
+                </ul>
+              </header>
+  
+              {post.data.content.map(part => (
+                <section key={part.heading}>
+                  <h2>{part.heading}</h2>
+                  <div dangerouslySetInnerHTML={{ __html: RichText.asHtml(part.body) }} />
+                </section>
+              ))}
+            </div>
           </div>
-        </div>
-      </article>
-    </main>
+        </article>
+      </main>
+    </>
   )
 }
 
